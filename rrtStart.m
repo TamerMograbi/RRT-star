@@ -18,7 +18,8 @@ obs = 50*obs; % scale obstacle for 1000 by 1000 axis
 obs2 = [1,2,4,3,2,1;2,1,2,4,1.5,2];
 obs2 = 60*obs2;
 
-
+allObs{1} = obs;
+allObs{2} = obs2;
 %draw obstacle
 for i=1:1:3
     line([obs(1,i);obs(1,i+1)], [obs(2,i);obs(2,i+1)], 'Color', 'm', 'LineWidth', 2);
@@ -30,6 +31,32 @@ for i=1:1:length(obs2)-1
     line([obs2(1,i);obs2(1,i+1)], [obs2(2,i);obs2(2,i+1)], 'Color', 'm', 'LineWidth', 2);
     drawnow
     hold on
+end
+
+%in case user wants to add obstacles using mouse
+[x,y,button] = ginput(1);
+%user will press Y if they want to add a new obstacle
+yAscii = 121; %ascii number of character y
+newObs = [];
+if button == yAscii
+    [x,y,button] = ginput(2);%we draw first line using x and y
+    line(x, y, 'Color', 'm', 'LineWidth', 2);
+    newObs = [x(1) x(2); y(1) y(2)];
+    prevPoint = [x(2) , y(2)]; % this will be the start point of next line
+    
+    [x1,y1,button] = ginput(1);
+    while button == 1 % 1 is for left mouse click
+        newObs = [ newObs [x1;y1]];
+        line([prevPoint(1), x1],[prevPoint(2);y1], 'Color', 'm', 'LineWidth', 2);
+        prevPoint = [x1 , y1];
+        [x1,y1,button] = ginput(1);%get next point
+    end
+    newObs = [ newObs [x(1);y(1)]]; % connect first and last points
+    line([prevPoint(1), x(1)],[prevPoint(2);y(1)], 'Color', 'm', 'LineWidth', 2);
+    allObs{length(allObs)+1} = newObs;%add newObs to the list of obstacles
+    
+else
+    disp('you press something else');
 end
 
 %only for xbox capture
@@ -58,7 +85,7 @@ while i < maxNodes
     
     nearest_idx = nearest(nodes, x_rand);
     x_new = steer(x_rand, nodes(nearest_idx).coord, maxStep);
-    if collisionWithAllObs(nodes(nearest_idx).coord,x_new,obs,obs2) == 0
+    if collisionWithAllObs(nodes(nearest_idx).coord,x_new,allObs) == 0
         r_near_nodes = r_near(nodes, x_new, r);
         plot(x_new(1),x_new(2),'k*')
         
@@ -66,7 +93,7 @@ while i < maxNodes
         cost_min = nodes(nearest_idx).cost + distance(nodes(nearest_idx).coord,x_new);
         
         for i_near = 1:1:length(r_near_nodes)
-            if collisionWithAllObs(r_near_nodes(i_near).coord,x_new,obs,obs2) == 0 && (r_near_nodes(i_near).cost + distance(r_near_nodes(i_near).coord,x_new)) < cost_min
+            if collisionWithAllObs(r_near_nodes(i_near).coord,x_new,allObs) == 0 && (r_near_nodes(i_near).cost + distance(r_near_nodes(i_near).coord,x_new)) < cost_min
                 x_min = r_near_nodes(i_near);
                 cost_min = r_near_nodes(i_near).cost + distance(r_near_nodes(i_near).coord,x_new);
             end
@@ -82,7 +109,7 @@ while i < maxNodes
         %nodes = [nodes node_new];
         
         for j_near = 1:1:length(r_near_nodes)
-            if collisionWithAllObs(x_new,r_near_nodes(j_near).coord,obs,obs2) == 0 && (nodes(i).cost +distance(x_new,r_near_nodes(j_near).coord) < r_near_nodes(j_near).cost)
+            if collisionWithAllObs(x_new,r_near_nodes(j_near).coord,allObs) == 0 && (nodes(i).cost +distance(x_new,r_near_nodes(j_near).coord) < r_near_nodes(j_near).cost)
                 x_parent = r_near_nodes(j_near).parent;
                 %now we want to delete edge x_parent, i_near
                 [rows,cols] = size(edges);
@@ -123,7 +150,7 @@ nearest_idx = nearest(nodes, x_end.coord);
 %might need to check maxStep here too.
 %if there was no path between start and goal, then this if will always fail
 %and we won't visualize path.
-if collisionWithAllObs(nodes(nearest_idx).coord,x_end.coord,obs,obs2) == 0
+if collisionWithAllObs(nodes(nearest_idx).coord,x_end.coord,allObs) == 0
     x_end.parent = nearest_idx;
     x_end.idx = length(nodes)+1;
     nodes(length(nodes)+1) = x_end;
@@ -172,12 +199,14 @@ function r_near_nodes = r_near(nodes, x_new, r)
     end
 end
 
-function colFound = collisionWithAllObs(a,b,obs1,obs2)
-    if collisionWithObstacle(a,b,obs1) == 1 || collisionWithObstacle(a,b,obs2) == 1
-        colFound = 1;
-        return;
+function colFound = collisionWithAllObs(a,b,obstacles)
+    for i = 1:1:length(obstacles)
+        if collisionWithObstacle(a,b,obstacles{i}) == 1 %|| configInsideObstacle(b,obstacles{i}) == 0
+            colFound = 1;
+            return;
+        end
+        colFound = 0;
     end
-    colFound = 0;
 end
     
     
