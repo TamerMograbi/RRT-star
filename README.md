@@ -9,6 +9,13 @@ the red line is the final path from start point to end point.
 
 ![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/RRTstartExample.png)
 
+another very luck find:
+
+![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/lucky-find.png)
+the algorithm found a path only due to lucky sampling of one point. otherwise it would have not found a path
+as RRT* doesn't work well with narrow passages.
+
+
 using random uniform sampling, we choose a coordinates for a point and try to connect it to our current tree.
 (which consists of only start point at first)
 we try to connect this new point to the closest vertex in the tree. we are able to connect them only if the line
