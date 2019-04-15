@@ -1,6 +1,8 @@
 clear; %without this, you will get weird  in consecutive runs results as
 %previous worksapce variables will be used
 
+warning off;
+
 
 x_max = 500;
 y_max = 500;
@@ -34,12 +36,12 @@ for i=1:1:length(obs2)-1
 end
 
 %in case user wants to add obstacles using mouse
-[x,y,button] = ginput(1);
+[~,~,buttonYN] = ginput(1); % we don't used first 2 variables so we replace with ~
 %user will press Y if they want to add a new obstacle
 yAscii = 121; %ascii number of character y
 newObs = [];
-if button == yAscii
-    [x,y,button] = ginput(2);%we draw first line using x and y
+while buttonYN == yAscii
+    [x,y,~] = ginput(2);%we draw first line using x and y
     line(x, y, 'Color', 'm', 'LineWidth', 2);
     newObs = [x(1) x(2); y(1) y(2)];
     prevPoint = [x(2) , y(2)]; % this will be the start point of next line
@@ -54,10 +56,9 @@ if button == yAscii
     newObs = [ newObs [x(1);y(1)]]; % connect first and last points
     line([prevPoint(1), x(1)],[prevPoint(2);y(1)], 'Color', 'm', 'LineWidth', 2);
     allObs{length(allObs)+1} = newObs;%add newObs to the list of obstacles
-    
-else
-    disp('you press something else');
+    [~,~,buttonYN] = ginput(1); %if user presses y again then we add another obstacle
 end
+
 
 %only for xbox capture
 %[d,f] = ginput(1);
