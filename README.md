@@ -1,13 +1,24 @@
 # RRT-star
 RRT star motion planning
 
-example run:
+this is a matlab implementation of RRT* algorithm which is an "enhanced" version of RRT.
+
+# example run:
 
 the lines in the color magneta represent obstacles.
 the black lines represent the created rapidly exploring tree.
 the red line is the final path from start point to end point.
 
 ![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/RRTstartExample.png)
+
+# another very luck find:
+
+![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/lucky-find.png)
+the algorithm found a path only due to lucky sampling of one point. otherwise it would have not found a path
+as RRT* doesn't work well with narrow passages.
+
+
+# high level explanation
 
 using random uniform sampling, we choose a coordinates for a point and try to connect it to our current tree.
 (which consists of only start point at first)
@@ -17,10 +28,8 @@ this is repeated until for example we reach a number of desired tree nodes.
 
 finally we find the closest point to the end point and try to connect them and if we are able to then we have found a path.
 (it's very unlikely that we don't get near the end point as we are sampling points uniformly)
-this algorithm has a very high chance of finding a path if there is one.
+this algorithm has a very high chance of finding a path if there is one UNLESS narrow passages are involved.
 
-
-this is a matlab implementation of RRT* algorithm which is an "enhanced" version of RRT.
 
 in addition to RRT, for each random point x_rand, the algorithm finds all the others points x_near in the tree that are within a circle of radius r
 from the random point and removes redundant edges. (look in code for more detail)
