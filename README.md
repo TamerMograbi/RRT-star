@@ -3,7 +3,7 @@ RRT star motion planning
 
 this is a matlab implementation of RRT* algorithm which is an "enhanced" version of RRT.
 
-example run:
+# example run:
 
 the lines in the color magneta represent obstacles.
 the black lines represent the created rapidly exploring tree.
@@ -11,7 +11,7 @@ the red line is the final path from start point to end point.
 
 ![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/RRTstartExample.png)
 
-another very luck find:
+# another very luck find:
 
 ![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/lucky-find.png)
 the algorithm found a path only due to lucky sampling of one point. otherwise it would have not found a path
