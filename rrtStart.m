@@ -1,4 +1,4 @@
-clear; %without this, you will get weird  in consecutive runs results as
+clear; %without this, you will get weird results in consecutive runs as
 %previous worksapce variables will be used
 
 warning off;
