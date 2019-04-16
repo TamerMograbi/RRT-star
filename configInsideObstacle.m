@@ -4,7 +4,7 @@
 function isInside = configInsideObstacle(a,obstacle)
     %a and b forms a horizental vector
     b = [a(1)+30;a(2)];
-    [rows,cols] = size(obstacle);
+    [~,cols] = size(obstacle);
     count = 0;
     for i = 1:1:cols-1
         c = [obstacle(1,i) ; obstacle(2,i)];
