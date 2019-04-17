@@ -37,14 +37,14 @@ for i=1:1:length(obs2)-1
     hold on
 end
 
-disp('press Y if you want to add an obstacle');
+disp(['press Y if you want to add an obstacle' newline]);
 %in case user wants to add obstacles using mouse
 [~,~,buttonYN] = ginput(1); % we don't used first 2 variables so we replace with ~
 %user will press Y if they want to add a new obstacle
 yAscii = 121; %ascii number of character y
 newObs = [];
 disp('keep using the left mouse click to create the obstacle');
-disp('when done, click anything else and the last point will be connected with the first point in order to form obstacle');
+disp(['when done, click anything else and the last point will be connected with the first point in order to form obstacle' newline]);
 while buttonYN == yAscii
     [x,y,~] = ginput(2);%we draw first line using x and y
     line(x, y, 'Color', 'm', 'LineWidth', 2);
@@ -61,11 +61,11 @@ while buttonYN == yAscii
     newObs = [ newObs [x(1);y(1)]]; % connect first and last points
     line([prevPoint(1), x(1)],[prevPoint(2);y(1)], 'Color', 'm', 'LineWidth', 2);
     allObs{length(allObs)+1} = newObs;%add newObs to the list of obstacles
-    disp('press Y if you want to start creating another obstacle');
+    disp(['press Y if you want to start creating another obstacle' newline]);
     [~,~,buttonYN] = ginput(1); %if user presses y again then we add another obstacle
 end
 
-disp('choose start and end points');
+disp(['choose start and end points' newline]);
 %only for xbox capture
 %[d,f] = ginput(1);
 
