@@ -17,6 +17,12 @@ the red line is the final path from start point to end point.
 the algorithm found a path only due to lucky sampling of one point. otherwise it would have not found a path
 as RRT* doesn't work well with narrow passages.
 
+# no path example:
+
+![alt text](https://raw.githubusercontent.com/TamerMograbi/RRT-star/master/noPath.png)
+
+rrt and it's varients aren't good when it comes to narrow passages, here we can see that the algoirthm couldn't find a path from start to end point
+
 
 # high level explanation
 
