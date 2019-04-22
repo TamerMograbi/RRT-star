@@ -1,3 +1,5 @@
+%there are more details on how to run code in the PDF
+
 clear; %without this, you will get weird results in consecutive runs as
 %previous worksapce variables will be used
 
@@ -43,9 +45,10 @@ disp(['press Y if you want to add an obstacle' newline]);
 %user will press Y if they want to add a new obstacle
 yAscii = 121; %ascii number of character y
 newObs = [];
-disp('keep using the left mouse click to create the obstacle');
-disp(['when done, click anything else and the last point will be connected with the first point in order to form obstacle' newline]);
+
 while buttonYN == yAscii
+    disp('keep using the left mouse click to create the obstacle');
+    disp(['when done, click anything else and the last point will be connected with the first point in order to form obstacle' newline]);
     [x,y,~] = ginput(2);%we draw first line using x and y
     line(x, y, 'Color', 'm', 'LineWidth', 2);
     newObs = [x(1) x(2); y(1) y(2)];
@@ -134,6 +137,8 @@ while i < maxNodes
         for j_near = 1:1:length(r_near_nodes)
             if collisionWithAllObs(x_new,r_near_nodes(j_near).coord,allObs) == 0 && (nodes(i).cost +distance(x_new,r_near_nodes(j_near).coord) < r_near_nodes(j_near).cost)
                 x_parent = r_near_nodes(j_near).parent;
+                %update cost of node within radius r appropriately
+                r_near_nodes(j_near).cost = nodes(i).cost +distance(x_new,r_near_nodes(j_near).coord);
                 %now we want to delete edge x_parent, i_near
                 [rows,cols] = size(edges);
                 for col = 1:1:cols
